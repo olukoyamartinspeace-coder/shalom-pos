@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Shalom POS</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192x192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192x192.png">
+
+    <style>
+        .contact-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            padding: var(--spacing-lg);
+        }
+
+        .contact-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            width: 100%;
+            max-width: 600px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .logo-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto var(--spacing-md);
+            box-shadow: var(--shadow-glow);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contact-container">
+        <div class="contact-card">
+            <div class="contact-header">
+                <img src="assets/logo.jpg" alt="Shalom POS" class="logo-circle">
+                <h1 style="font-size: var(--font-size-3xl); margin-bottom: var(--spacing-xs);">
+                    <span
+                        style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        Contact Us
+                    </span>
+                </h1>
+                <p style="color: var(--text-muted);">We'd love to hear from you</p>
+            </div>
+
+            <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-user"></i> Full Name
+                    </label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-tag"></i> Subject
+                    </label>
+                    <input type="text" class="form-control" id="subject" placeholder="Enter subject" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-comment"></i> Message
+                    </label>
+                    <textarea class="form-control" id="message" placeholder="Enter your message" rows="5" required></textarea>
+                </div>
+
+                <div id="successMessage" class="alert alert-success hidden" style="margin-bottom: var(--spacing-md);">
+                    <i class="fas fa-check-circle"></i> <span id="successText">Thank you! Your message has been sent successfully.</span>
+                </div>
+
+                <div id="errorMessage" class="alert alert-danger hidden" style="margin-bottom: var(--spacing-md);">
+                    <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg"
+                    style="margin-bottom: var(--spacing-md);">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+
+            <div
+                style="margin-top: var(--spacing-xl); padding-top: var(--spacing-md); border-top: 1px solid var(--border-color); text-align: center;">
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="modules/data-manager.js"></script>
+    <script>
+        // Initialize DataManager
+        DataManager.init();
+
+        function handleContactSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+
+            try {
+                // Save contact data to JSON
+                const contactData = {
+                    id: Date.now().toString(),
+                    name: name,
+                    email: email,
+                    subject: subject,
+                    message: message,
+                    timestamp: new Date().toISOString()
+                };
+
+                // Save contact data using DataManager
+                DataManager.addContact(contactData);
+
+                // Show success message
+                successMessage.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+
+                // Reset form
+                document.getElementById('contactForm').reset();
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 5000);
+
+            } catch (error) {
+                errorText.textContent = 'Failed to send message. Please try again.';
+                errorMessage.classList.remove('hidden');
+                successMessage.classList.add('hidden');
+            }
+        }
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>
