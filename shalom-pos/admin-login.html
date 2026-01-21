@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Shalom POS</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192x192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192x192.png">
+
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            padding: var(--spacing-lg);
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .logo-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto var(--spacing-md);
+            box-shadow: var(--shadow-glow);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="assets/logo.jpg" alt="Shalom POS" class="logo-circle">
+                <h1 style="font-size: var(--font-size-3xl); margin-bottom: var(--spacing-xs);">
+                    <span
+                        style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        Admin Login
+                    </span>
+                </h1>
+                <p style="color: var(--text-muted);">Shalom POS Administration</p>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <input type="text" class="form-control" id="username" placeholder="Enter username" required
+                        autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                </div>
+
+                <div id="errorMessage" class="alert alert-danger hidden" style="margin-bottom: var(--spacing-md);">
+                    <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg"
+                    style="margin-bottom: var(--spacing-md);">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+
+                <div style="text-align: center;">
+                    <a href="forgot-password.html"
+                        style="color: var(--primary-light); text-decoration: none; font-size: 0.875rem;">
+                        <i class="fas fa-key"></i> Forgot Password?
+                    </a>
+                </div>
+            </form>
+
+            <div
+                style="margin-top: var(--spacing-xl); padding-top: var(--spacing-md); border-top: 1px solid var(--border-color); text-align: center;">
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="modules/auth.js"></script>
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+
+            const result = Auth.login(username, password);
+
+            if (result.success) {
+                window.location.href = 'admin.html';
+            } else {
+                errorText.textContent = result.error;
+                errorMessage.classList.remove('hidden');
+
+                // Clear password field
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        }
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>

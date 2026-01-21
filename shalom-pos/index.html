@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shalom - Community & Commerce</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b1e33">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192x192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192x192.png">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CSS STYLES --- */
+
+        /* 1. Reset and Fonts */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* 2. Main Container - The 3D Environment */
+        body {
+            background-color: #0b1e33;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 300;
+            overflow: hidden;
+        }
+
+        /* Full Screen Video */
+        video.logo-reveal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* Hero Content Overlay */
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            color: white;
+            animation: fadeUp 1s ease-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .btn-main {
+            display: inline-block;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, #ffcc00, #ff9900);
+            color: #050f1a;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 204, 0, 0.4);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Video -->
+    <video class="logo-reveal" autoplay muted loop playsinline>
+        <source src="shalom-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+        <h1>Community & Commerce</h1>
+        <a href="login.html" class="btn-main">
+            Get Started
+        </a>
+    </div>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+
+        // Install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('Install prompt available');
+        });
+    </script>
+</body>
+
+</html>

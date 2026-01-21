@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shalom POS - Cashier Interface for daily sales operations">
+    <title>Cashier - Shalom POS</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192x192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192x192.png">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/logo.jpg" alt="Shalom POS Logo" class="logo">
+                <div>
+                    <h1 class="app-title">SHALOM</h1>
+                    <p class="app-subtitle">Cashier Terminal</p>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <ul>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-module="pos">
+                            <i class="fas fa-cash-register"></i>
+                            <span>Point of Sale</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-module="quick-inventory">
+                            <i class="fas fa-search"></i>
+                            <span>Product Lookup</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-module="quick-customers">
+                            <i class="fas fa-user-check"></i>
+                            <span>Customer Lookup</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-module="today">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>Today's Sales</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div style="margin-top: auto; padding: var(--spacing-md); border-top: 1px solid var(--border-color);">
+                <a href="index.html" class="btn btn-secondary btn-sm btn-block">
+                    <i class="fas fa-arrow-left"></i> Return to Home
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="btn btn-secondary btn-sm" id="toggleSidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="pageTitle">Point of Sale</h1>
+                </div>
+                <div class="topbar-right">
+                    <div style="margin-right: var(--spacing-md); text-align: right;">
+                        <div style="font-size: 0.875rem; color: var(--text-muted);">Today's Sales</div>
+                        <div style="font-size: var(--font-size-lg); font-weight: 700; color: var(--accent-color);"
+                            id="todaySalesTotal">
+                            $0.00
+                        </div>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;" id="userName">Cashier</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Sales Associate</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Content Area -->
+            <div class="content-area" id="contentArea">
+                <!-- Content will be loaded here dynamically -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Container -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Modal Title</h2>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be loaded here -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <!-- Modal footer buttons will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="modules/data-manager.js"></script>
+    <script src="modules/sales.js"></script>
+    <script src="modules/cashier-modules.js"></script>
+    <script src="cashier-app.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>
